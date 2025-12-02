@@ -7,28 +7,20 @@ script = ExtResource("1_glv2v")
 
 [node name="Balls" type="Node" parent="."]
 
-[node name="BlackScreen" type="ColorRect" parent="."]
-visible = false
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_right = 1024.0
-offset_bottom = 1024.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0, 0, 0, 1)
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 10
 
-[node name="QuestionMark" type="Label" parent="BlackScreen"]
+[node name="BlackScreen" type="Sprite2D" parent="CanvasLayer"]
+unique_name_in_owner = true
 visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_right = 1024.0
-offset_bottom = 1024.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_font_sizes/font_size = 512
+position = Vector2(512, 512)
+
+[node name="QuestionMark" type="Label" parent="CanvasLayer/BlackScreen"]
+unique_name_in_owner = true
+visible = false
+offset_left = -109.0
+offset_top = -358.0
+offset_right = 113.0
+offset_bottom = 311.0
+theme_override_font_sizes/font_size = 491
 text = "?"
-horizontal_alignment = 1
-vertical_alignment = 1

@@ -8,8 +8,8 @@ var black_start: float
 var black_duration: float
 var elapsed: float = 0.0
 
-@onready var black_screen: ColorRect = $BlackScreen
-@onready var question_mark: Label = $BlackScreen/QuestionMark
+@onready var black_screen: Sprite2D = %BlackScreen
+@onready var question_mark: Label = %QuestionMark
 
 
 func _ready() -> void:
@@ -34,75 +34,76 @@ func _ready() -> void:
 	add_child(recorder)
 	recorder.start_recording(fps, duration)
 
+	# Écran noir
+	black_screen.texture = generate_black_texture()
+	scale_sprite_to_viewport(black_screen)
+
+	# Point d'interrogation
+	center_question_mark()
+	question_mark.hide()
+
+
+func generate_black_texture() -> Texture2D:
+	var size: int = 64
+	var img := Image.create(size, size, false, Image.FORMAT_RGBA8)
+	img.fill(Color.BLACK)
+	return ImageTexture.create_from_image(img)
+
+
+func scale_sprite_to_viewport(sprite: Sprite2D) -> void:
+	var viewport_size: Vector2 = get_viewport_rect().size
+	var tex_size: Vector2 = sprite.texture.get_size()
+	var scale_x: float = viewport_size.x / tex_size.x
+	var scale_y: float = viewport_size.y / tex_size.y
+	sprite.scale = Vector2(scale_x, scale_y)
+
+
+func center_question_mark() -> void:
+	var viewport_size: Vector2 = get_viewport_rect().size
+	var label_size: Vector2 = question_mark.get_minimum_size()
+	question_mark.position = viewport_size * 0.5 - label_size * 0.5
+
 
 func _spawn_balls() -> void:
 	var balls_node: Node = $Balls
 
-	# Correctement vider le conteneur
 	for child in balls_node.get_children():
 		child.queue_free()
 
 	var ball_count: int = int(cfg.get_value("ball_count", "1"))
 	var radius: float = float(cfg.get_value("ball_radius", "20.0"))
 
-	# Colors
 	var color_raw: String = String(cfg.get_value("ball_colors", "#ffffff"))
-	var color_psa: PackedStringArray = color_raw.split(",")
-	var color_list: Array[String] = _to_string_array(color_psa)
+	var color_list: Array[String] = _to_string_array(color_raw.split(","))
 
-	# Positions
 	var pos_raw: String = String(cfg.get_value("ball_positions", "100,100"))
-	var pos_psa: PackedStringArray = pos_raw.split(";")
-	var pos_entries: Array[String] = _to_string_array(pos_psa)
+	var pos_entries: Array[String] = _to_string_array(pos_raw.split(";"))
 
-	# Directions
 	var dir_raw: String = String(cfg.get_value("ball_directions", "1,0"))
-	var dir_psa: PackedStringArray = dir_raw.split(";")
-	var dir_entries: Array[String] = _to_string_array(dir_psa)
+	var dir_entries: Array[String] = _to_string_array(dir_raw.split(";"))
 
-	# Speeds
 	var speed_raw: String = String(cfg.get_value("ball_speeds", "100"))
-	var speed_psa: PackedStringArray = speed_raw.split(",")
-	var speed_entries: Array[String] = _to_string_array(speed_psa)
+	var speed_entries: Array[String] = _to_string_array(speed_raw.split(","))
 
 	var ball_scene: PackedScene = load("res://Ball.tscn")
 
 	for i in range(ball_count):
 		var ball: Node2D = ball_scene.instantiate()
 
-		# Couleur
-		var color_idx: int = i % color_list.size()
+		var color_idx := i % color_list.size()
 		ball.call("setup_color", color_list[color_idx])
-
-		# Radius
 		ball.set("radius", radius)
 
-		# Position
-		var pos_token_psa: PackedStringArray = pos_entries[i % pos_entries.size()].split(",")
-		var pos_tokens: Array[String] = _to_string_array(pos_token_psa)
+		var pos_tokens := _to_string_array(pos_entries[i % pos_entries.size()].split(","))
+		ball.global_position = Vector2(float(pos_tokens[0]), float(pos_tokens[1]))
 
-		var pos_vec: Vector2 = Vector2(
-			float(pos_tokens[0]),
-			float(pos_tokens[1])
-		)
-		ball.global_position = pos_vec
+		var dir_tokens := _to_string_array(dir_entries[i % dir_entries.size()].split(","))
+		var dir_vec := Vector2(float(dir_tokens[0]), float(dir_tokens[1]))
 
-		# Direction
-		var dir_token_psa: PackedStringArray = dir_entries[i % dir_entries.size()].split(",")
-		var dir_tokens: Array[String] = _to_string_array(dir_token_psa)
-
-		var dir_vec: Vector2 = Vector2(
-			float(dir_tokens[0]),
-			float(dir_tokens[1])
-		)
-
-		# Speed
-		var speed_value: float = float(speed_entries[i % speed_entries.size()])
-
+		var speed_value := float(speed_entries[i % speed_entries.size()])
 		ball.call("setup_motion", dir_vec, speed_value)
 
 		balls_node.add_child(ball)
-
 
 
 func _process(delta: float) -> void:
