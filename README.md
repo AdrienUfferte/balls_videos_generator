@@ -1,6 +1,11 @@
 # balls_videos_generator
 
-Creates video of moving balls for a neuroscience experiment
+Creates the frames of a video of moving balls for a neuroscience experiment
+
+The capture now also outputs a final `frame_answer.png` frame: after every black screen frame
+has been recorded, the overlay is removed without advancing the simulation, and the
+ball positions are captured once more in that reveal image.
+
 
 Execute the .exe (or equivalent on platforms other than Windows) with the `config.txt` file next to it.
 It shall create videos following the `config.txt` data, including per-ball properties such as:

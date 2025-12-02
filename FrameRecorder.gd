@@ -1,6 +1,8 @@
 extends Node
 class_name FrameRecorder
 
+signal recording_finished
+
 var fps: int = 60
 var duration: float = 5.0
 var total_frames: int = 0
@@ -8,6 +10,9 @@ var current_frame: int = 0
 var accumulator: float = 0.0
 
 var output_folder: String = ""
+
+var _finished_notified: bool = false
+var _answer_captured: bool = false
 
 
 func start_recording(p_fps: int, p_seconds: float) -> void:
@@ -33,9 +38,10 @@ func _process(delta: float) -> void:
 		accumulator -= step
 		_capture()
 
-	if current_frame >= total_frames:
-		print("[Recorder] Finished recording, quitting…")
-		get_tree().quit()
+	if current_frame >= total_frames and not _finished_notified:
+		_finished_notified = true
+		print("[Recorder] Finished recording, awaiting answer capture…")
+		emit_signal("recording_finished")
 
 
 func _capture() -> void:
@@ -51,6 +57,28 @@ func _capture() -> void:
 		print("[Recorder] OK saved")
 
 	current_frame += 1
+
+
+func capture_answer_image() -> void:
+	if _answer_captured:
+		return
+
+	_answer_captured = true
+	
+	await get_tree().process_frame
+	var file_path: String = "%s/frame_answer.png" % output_folder
+	print("[Recorder] Capturing answer frame →", file_path)
+
+	var img: Image = get_viewport().get_texture().get_image()
+	var err := img.save_png(file_path)
+
+	if err != OK:
+		print("[Recorder] ERROR saving answer frame (code =", err, ")")
+	else:
+		print("[Recorder] OK saved answer frame")
+
+	print("[Recorder] Finished answer capture, quitting…")
+	get_tree().quit()
 
 
 func _create_output_folder() -> void:

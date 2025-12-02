@@ -6,6 +6,7 @@ var duration: float
 var arena_size: int
 var black_start: float
 var elapsed: float = 0.0
+var recorder: FrameRecorder
 
 @onready var black_screen: Sprite2D = %BlackScreen
 @onready var arena: Arena = %Arena
@@ -28,8 +29,9 @@ func _ready() -> void:
 
 	_spawn_balls()
 
-	var recorder := FrameRecorder.new()
+	recorder = FrameRecorder.new()
 	add_child(recorder)
+	recorder.recording_finished.connect(_on_recording_finished)
 	recorder.start_recording(fps, duration)
 
 	# Écran noir
@@ -107,8 +109,14 @@ func _process(delta: float) -> void:
 	if elapsed >= black_start:
 		black_screen.show()
 
+
 func _to_string_array(psa: PackedStringArray) -> Array[String]:
 	var arr: Array[String] = []
 	for s in psa:
 		arr.append(String(s))
 	return arr
+
+
+func _on_recording_finished() -> void:
+	black_screen.hide()
+	recorder.capture_answer_image()
