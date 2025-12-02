@@ -60,7 +60,12 @@ func _spawn_balls() -> void:
 		child.queue_free()
 
 	var ball_count: int = int(cfg.get_value("ball_count", "1"))
-	var radius: float = float(cfg.get_value("ball_radius", "20.0"))
+	var radii_raw: String = String(cfg.get_value("ball_radii", ""))
+	var radii_entries: Array[String]
+	if radii_raw == "":
+		radii_entries = [String(cfg.get_value("ball_radius", "20.0"))]
+	else:
+		radii_entries = _to_string_array(radii_raw.split(","))
 
 	var color_raw: String = String(cfg.get_value("ball_colors", "#ffffff"))
 	var color_list: Array[String] = _to_string_array(color_raw.split(","))
@@ -81,7 +86,8 @@ func _spawn_balls() -> void:
 
 		var color_idx := i % color_list.size()
 		ball.call("setup_color", color_list[color_idx])
-		ball.set("radius", radius)
+		var radius_value := float(radii_entries[i % radii_entries.size()])
+		ball.set("radius", radius_value)
 
 		var pos_tokens := _to_string_array(pos_entries[i % pos_entries.size()].split(","))
 		ball.global_position = Vector2(float(pos_tokens[0]), float(pos_tokens[1]))
