@@ -1,0 +1,15 @@
+fps=60
+duration_seconds=10
+arena_size=800
+
+ball_count=3
+ball_radius=20
+
+ball_colors=#ff0000,#00ff00,#0000ff
+
+ball_positions=100,100;200,300;500,200
+ball_directions=1,0;-1,1;0,-1
+ball_speeds=150,200,100
+
+black_screen_start=8
+black_screen_duration=1.5
