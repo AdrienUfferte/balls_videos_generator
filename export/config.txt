@@ -10,5 +10,7 @@ ball_colors=#ff0000,#00ff00,#0000ff
 ball_positions=100,100;200,300;500,200
 ball_directions=1,0;-1,1;0,-1
 ball_speeds=150,200,100
+ball_masses = 1.0,2.0,1.5
+ball_frictions = 0.0,15.0,-5.0
 
 black_screen_start=4

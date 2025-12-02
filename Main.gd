@@ -81,11 +81,22 @@ func _spawn_balls() -> void:
 	var speed_raw: String = String(cfg.get_value("ball_speeds", "100"))
 	var speed_entries: Array[String] = _to_string_array(speed_raw.split(","))
 
-	var ball_scene: PackedScene = load("res://Ball.tscn")
+	var mass_raw: String = String(cfg.get_value("ball_masses", ""))
+	var mass_entries: Array[String]
+	if mass_raw == "":
+		mass_entries = [String(cfg.get_value("ball_mass", "1.0"))]
+	else:
+		mass_entries = _to_string_array(mass_raw.split(","))
 
+	var friction_raw: String = String(cfg.get_value("ball_frictions", ""))
+	var friction_entries: Array[String]
+	if friction_raw == "":
+		friction_entries = [String(cfg.get_value("ball_friction", "0.0"))]
+	else:
+		friction_entries = _to_string_array(friction_raw.split(","))
+	var ball_scene: PackedScene = load("res://Ball.tscn")
 	for i in range(ball_count):
 		var ball: Node2D = ball_scene.instantiate()
-
 		var color_idx := i % color_list.size()
 		ball.call("setup_color", color_list[color_idx])
 		var radius_value := float(radii_entries[i % radii_entries.size()])
@@ -96,10 +107,12 @@ func _spawn_balls() -> void:
 
 		var dir_tokens := _to_string_array(dir_entries[i % dir_entries.size()].split(","))
 		var dir_vec := Vector2(float(dir_tokens[0]), float(dir_tokens[1]))
-
 		var speed_value := float(speed_entries[i % speed_entries.size()])
 		ball.call("setup_motion", dir_vec, speed_value)
-
+		var mass_value := float(mass_entries[i % mass_entries.size()])
+		ball.set("mass", mass_value)
+		var friction_value := float(friction_entries[i % friction_entries.size()])
+		ball.set("friction_factor", friction_value)
 		balls_node.add_child(ball)
 
 

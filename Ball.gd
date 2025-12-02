@@ -2,6 +2,8 @@ extends Area2D
 class_name Ball
 
 @export var radius: float = 20.0
+@export var mass: float = 1.0
+@export var friction_factor: float = 0.0
 var velocity: Vector2 = Vector2.ZERO
 var shape: CircleShape2D
 
@@ -18,6 +20,7 @@ func setup_motion(direction: Vector2, speed: float) -> void:
 	velocity = direction.normalized() * speed
 
 func _physics_process(delta: float) -> void:
+	_apply_friction(delta)
 	global_position += velocity * delta
 	_handle_wall_bounce()
 	_handle_ball_collisions()
@@ -73,19 +76,29 @@ func _handle_ball_collisions() -> void:
 	for other in get_parent().get_children():
 		if other == self:
 			continue
-
 		var other_ball: Ball = other as Ball
 		if other_ball == null:
 			continue
-
 		var dist: float = global_position.distance_to(other_ball.global_position)
 		var min_dist: float = radius + other_ball.radius
-
 		if dist < min_dist:
 			var normal: Vector2 = (global_position - other_ball.global_position).normalized()
 			var rel: Vector2 = velocity - other_ball.velocity
 			var sep: float = rel.dot(normal)
-
 			if sep < 0.0:
-				velocity = velocity - normal * sep
-				other_ball.velocity = other_ball.velocity + normal * sep
+				var m1: float = mass
+				var m2: float = other_ball.mass
+				var impulse: float = (2.0 * sep) / (m1 + m2)
+				velocity = velocity - normal * impulse * m2
+				other_ball.velocity = other_ball.velocity + normal * impulse * m1
+
+
+func _apply_friction(delta: float) -> void:
+	var speed: float = velocity.length()
+	if speed == 0.0:
+			return
+	var new_speed: float = max(0.0, speed - friction_factor * delta)
+	if new_speed == 0.0:
+		velocity = Vector2.ZERO
+		return
+	velocity = velocity.normalized() * new_speed

@@ -31,6 +31,11 @@ missing.
 - `ball_directions` (semicolon-separated `x,y` vectors, default `1,0`): Initial direction per ball. Vectors are
   normalized internally before multiplying by speed.
 - `ball_speeds` (comma-separated floats, default `100`): Speed per ball in pixels per second.
+- `ball_masses` (comma-separated floats): Mass per ball; if omitted, `ball_mass` is used for every ball.
+- `ball_mass` (float, default `1.0`): Fallback mass when `ball_masses` is not provided.
+- `ball_frictions` (comma-separated floats): Friction factor per ball. Positive values slow the ball down over time,
+  negative values accelerate it.
+- `ball_friction` (float, default `0.0`): Fallback friction when `ball_frictions` is not provided.
 
 Example `config.txt`:
 
@@ -45,6 +50,8 @@ ball_colors = #ff0000,#00ff00,#0000ff
 ball_positions = 100,100; 200,200; 300,300
 ball_directions = 1,0; 0,1; -1,0
 ball_speeds = 120,140,160
+ball_masses = 1.0,2.0,1.5
+ball_frictions = 0.0,15.0,-5.0
 ```
 
 ## Converting recorded frames to a video with ffmpeg
