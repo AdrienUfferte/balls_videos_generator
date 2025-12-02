@@ -50,6 +50,7 @@ func scale_sprite_to_viewport(sprite: Sprite2D) -> void:
 	var scale_x: float = viewport_size.x / tex_size.x
 	var scale_y: float = viewport_size.y / tex_size.y
 	sprite.scale = Vector2(scale_x, scale_y)
+	sprite.position = viewport_size / 2
 
 
 func _spawn_balls() -> void:

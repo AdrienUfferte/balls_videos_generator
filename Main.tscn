@@ -18,4 +18,3 @@ layer = 10
 [node name="BlackScreen" type="Sprite2D" parent="CanvasLayer"]
 unique_name_in_owner = true
 visible = false
-position = Vector2(512, 512)
