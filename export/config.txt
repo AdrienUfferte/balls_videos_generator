@@ -1,5 +1,5 @@
 fps=60
-duration_seconds=10
+duration_seconds=5
 arena_size=800
 
 ball_count=3
@@ -11,5 +11,4 @@ ball_positions=100,100;200,300;500,200
 ball_directions=1,0;-1,1;0,-1
 ball_speeds=150,200,100
 
-black_screen_start=8
-black_screen_duration=1.5
+black_screen_start=4

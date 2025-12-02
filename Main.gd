@@ -5,11 +5,9 @@ var fps: int
 var duration: float
 var arena_size: int
 var black_start: float
-var black_duration: float
 var elapsed: float = 0.0
 
 @onready var black_screen: Sprite2D = %BlackScreen
-@onready var question_mark: Label = %QuestionMark
 
 
 func _ready() -> void:
@@ -26,8 +24,6 @@ func _ready() -> void:
 	else:
 		black_start = float(raw_black_start)
 
-	black_duration = float(cfg.get_value("black_screen_duration", "1.0"))
-
 	_spawn_balls()
 
 	var recorder := FrameRecorder.new()
@@ -37,10 +33,6 @@ func _ready() -> void:
 	# Écran noir
 	black_screen.texture = generate_black_texture()
 	scale_sprite_to_viewport(black_screen)
-
-	# Point d'interrogation
-	center_question_mark()
-	question_mark.hide()
 
 
 func generate_black_texture() -> Texture2D:
@@ -56,12 +48,6 @@ func scale_sprite_to_viewport(sprite: Sprite2D) -> void:
 	var scale_x: float = viewport_size.x / tex_size.x
 	var scale_y: float = viewport_size.y / tex_size.y
 	sprite.scale = Vector2(scale_x, scale_y)
-
-
-func center_question_mark() -> void:
-	var viewport_size: Vector2 = get_viewport_rect().size
-	var label_size: Vector2 = question_mark.get_minimum_size()
-	question_mark.position = viewport_size * 0.5 - label_size * 0.5
 
 
 func _spawn_balls() -> void:
@@ -111,10 +97,6 @@ func _process(delta: float) -> void:
 
 	if elapsed >= black_start:
 		black_screen.show()
-
-	if elapsed >= black_start + black_duration:
-		question_mark.show()
-
 
 func _to_string_array(psa: PackedStringArray) -> Array[String]:
 	var arr: Array[String] = []
