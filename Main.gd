@@ -8,6 +8,7 @@ var black_start: float
 var elapsed: float = 0.0
 
 @onready var black_screen: Sprite2D = %BlackScreen
+@onready var arena: Arena = %Arena
 
 
 func _ready() -> void:
@@ -17,6 +18,7 @@ func _ready() -> void:
 	fps = int(cfg.get_value("fps", "60"))
 	duration = float(cfg.get_value("duration_seconds", "10"))
 	arena_size = int(cfg.get_value("arena_size", "800"))
+	arena.set_arena_size(arena_size)
 
 	var raw_black_start: String = cfg.get_value("black_screen_start", "")
 	if raw_black_start == "":

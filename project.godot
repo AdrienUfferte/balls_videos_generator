@@ -17,5 +17,10 @@ config/features=PackedStringArray("4.5", "Forward Plus")
 
 [display]
 
-window/size/viewport_width=1024
-window/size/viewport_height=1024
+window/size/viewport_width=800
+window/size/viewport_height=800
+window/size/resizable=false
+
+[physics]
+
+common/physics_jitter_fix=0.0
