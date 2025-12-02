@@ -41,3 +41,22 @@ ball_positions = 100,100; 200,200; 300,300
 ball_directions = 1,0; 0,1; -1,0
 ball_speeds = 120,140,160
 ```
+
+## Converting recorded frames to a video with ffmpeg
+
+When the project records frames as individual images, you can stitch them into a video using ffmpeg. Place all
+exported images in a single folder with a consistent filename pattern (for example, `frame_00001.png`). Then run
+one of the following commands from that folder:
+
+- Create an MP4 video from numbered PNG files at 60 fps:
+  ```bash
+  ffmpeg -framerate 60 -i "frame_%05d.png" -c:v libx264 -pix_fmt yuv420p output.mp4
+  ```
+
+- Create a lossless WebM video while preserving alpha transparency:
+  ```bash
+  ffmpeg -framerate 60 -i "frame_%05d.png" -c:v libvpx-vp9 -lossless 1 -pix_fmt yuva420p output.webm
+  ```
+
+Adjust `-framerate` to match the `fps` used in your `config.txt`, and update the `frame_%05d.png` pattern if your
+files use a different prefix or padding.
