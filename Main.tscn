@@ -7,7 +7,7 @@ script = ExtResource("1_glv2v")
 
 [node name="Balls" type="Node" parent="."]
 
-[node name="BackScreen" type="ColorRect" parent="."]
+[node name="BlackScreen" type="ColorRect" parent="."]
 visible = false
 anchors_preset = 15
 anchor_right = 1.0
@@ -18,7 +18,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
-[node name="Label" type="Label" parent="BackScreen"]
+[node name="QuestionMark" type="Label" parent="BlackScreen"]
 visible = false
 layout_mode = 1
 anchors_preset = 15

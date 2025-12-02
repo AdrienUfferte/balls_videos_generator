@@ -6,8 +6,10 @@ var duration: float
 var arena_size: int
 var black_start: float
 var black_duration: float
-
 var elapsed: float = 0.0
+
+@onready var black_screen: ColorRect = $BlackScreen
+@onready var question_mark: Label = $BlackScreen/QuestionMark
 
 
 func _ready() -> void:
@@ -107,11 +109,10 @@ func _process(delta: float) -> void:
 	elapsed += delta
 
 	if elapsed >= black_start:
-		$BlackScreen.visible = true
+		black_screen.show()
 
 	if elapsed >= black_start + black_duration:
-		$BlackScreen/QuestionMark.visible = true
-
+		question_mark.show()
 
 
 func _to_string_array(psa: PackedStringArray) -> Array[String]:
