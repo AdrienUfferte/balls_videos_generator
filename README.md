@@ -1,6 +1,6 @@
 # balls_videos_generator
 
-Creates the frames of a video of moving balls for a neuroscience experiment
+Creates the frames of a video of moving balls for a neuroscience experiment, using the Godot Engine (version 4.5 stable). All gameplay and tooling code is written in GDScript.
 
 The capture now also outputs a final `frame_answer.png` frame: after every black screen frame
 has been recorded, the overlay is removed without advancing the simulation, and the
